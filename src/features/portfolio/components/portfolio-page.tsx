@@ -21,6 +21,7 @@ import { useMemo, useState } from "react";
 import { FaGithub } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { FaLinkedin } from "react-icons/fa";
 import { localeLabels, locales, type Locale } from "@/i18n/messages";
 import { AmbientBackground } from "@/shared/components/effects/app-effects";
 import { Reveal, SectionShell } from "@/shared/components/effects/reveal";
@@ -28,7 +29,6 @@ import { Button } from "@/shared/components/ui/button";
 import { cn } from "@/shared/lib/utils";
 import { usePreferencesStore } from "@/store/preferences";
 import {
-  githubFallback,
   metrics,
   navItems,
   profile,
@@ -236,8 +236,8 @@ function Hero() {
                   {profile.name}
                 </h2>
                 <p className="mt-4 max-w-xs text-sm leading-6 text-zinc-300">
-                  Frontend systems, interaction craft, performance, and product
-                  UX.
+                  Full-stack development, multi-tenant SaaS architecture, and
+                  API integration.
                 </p>
               </div>
             </div>
@@ -290,8 +290,8 @@ function Experience() {
       <div className="mt-12 grid gap-5">
         {timeline.map((item, index) => (
           <Reveal key={item.year} delay={index * 0.06}>
-            <article className="group grid gap-5 rounded-3xl border border-zinc-200/70 bg-white/65 p-6 backdrop-blur-xl transition hover:-translate-y-1 hover:border-cyan-300/70 dark:border-white/10 dark:bg-white/5 sm:grid-cols-[9rem_1fr]">
-              <div className="text-2xl font-semibold text-cyan-700 dark:text-cyan-300">
+            <article className="group grid gap-5 rounded-3xl border border-zinc-200/70 bg-white/65 p-6 backdrop-blur-xl transition hover:-translate-y-1 hover:border-cyan-300/70 dark:border-white/10 dark:bg-white/5 sm:grid-cols-[12rem_1fr]">
+              <div className="text-base font-semibold text-cyan-700 dark:text-cyan-300 sm:text-lg">
                 {item.year}
               </div>
               <div>
@@ -433,59 +433,20 @@ function StackAndGithub() {
       eyebrow={t("labels.stack")}
       title={t("sections.github")}
     >
-      <div className="mt-12 grid gap-5 lg:grid-cols-[1fr_.85fr]">
-        <Reveal className="grid grid-cols-2 gap-3 rounded-3xl border border-zinc-200/70 bg-white/65 p-5 backdrop-blur-xl dark:border-white/10 dark:bg-white/5 sm:grid-cols-3">
-          {stack.map((item) => {
-            const Icon = item.icon;
-            return (
-              <div
-                key={item.name}
-                className="flex items-center gap-3 rounded-2xl border border-zinc-200/60 bg-white/60 p-4 dark:border-white/10 dark:bg-white/5"
-              >
-                <Icon className="h-6 w-6 text-cyan-600 dark:text-cyan-300" />
-                <span className="text-sm font-medium">{item.name}</span>
+      <div className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+        {stack.map((item, index) => {
+          const Icon = item.icon;
+          return (
+            <Reveal key={item.name} delay={index * 0.04}>
+              <div className="group flex items-center gap-3 rounded-2xl border border-zinc-200/70 bg-white/65 p-4 backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:border-cyan-300/70 hover:bg-white/85 hover:shadow-[0_20px_60px_rgba(14,165,233,.2)] dark:border-white/10 dark:bg-white/5 dark:hover:bg-white/10">
+                <Icon className="h-7 w-7 text-zinc-500 transition duration-300 group-hover:scale-110 group-hover:text-cyan-600 dark:text-zinc-400 dark:group-hover:text-cyan-300" />
+                <span className="text-sm font-medium text-zinc-700 dark:text-zinc-200">
+                  {item.name}
+                </span>
               </div>
-            );
-          })}
-        </Reveal>
-        <Reveal
-          delay={0.1}
-          className="rounded-3xl border border-zinc-200/70 bg-zinc-950 p-6 text-white shadow-2xl dark:border-white/10"
-        >
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm uppercase tracking-[0.26em] text-cyan-200">
-                {t("labels.github")}
-              </p>
-              <h3 className="mt-3 text-2xl font-semibold">
-                Contribution graph fallback
-              </h3>
-            </div>
-            <FaGithub className="h-7 w-7" />
-          </div>
-          <div className="mt-8 grid grid-cols-3 gap-3">
-            {[
-              ["Stars", githubFallback.stars],
-              ["Repos", githubFallback.repositories],
-              ["Commits", githubFallback.commits],
-            ].map(([label, value]) => (
-              <div key={label} className="rounded-2xl bg-white/10 p-4">
-                <div className="text-2xl font-semibold">{value}</div>
-                <div className="mt-1 text-xs text-zinc-300">{label}</div>
-              </div>
-            ))}
-          </div>
-          <div className="mt-6 flex flex-wrap gap-2">
-            {githubFallback.languages.map((language) => (
-              <span
-                key={language}
-                className="rounded-full bg-white/10 px-3 py-1 text-xs text-zinc-200"
-              >
-                {language}
-              </span>
-            ))}
-          </div>
-        </Reveal>
+            </Reveal>
+          );
+        })}
       </div>
     </SectionShell>
   );
@@ -515,8 +476,8 @@ function Contact() {
         <Reveal className="rounded-3xl border border-zinc-200/70 bg-white/65 p-7 backdrop-blur-xl dark:border-white/10 dark:bg-white/5">
           <h3 className="text-2xl font-semibold">{profile.name}</h3>
           <p className="mt-4 text-zinc-600 dark:text-zinc-300">
-            Product interfaces, design systems, dashboards, and
-            performance-sensitive app surfaces.
+            Multi-tenant SaaS applications, REST APIs, and reusable frontend
+            architecture with Next.js and React.
           </p>
           <div className="mt-7 flex flex-wrap gap-3">
             <Button asChild variant="secondary">
@@ -529,6 +490,12 @@ function Contact() {
               <a href={profile.github} target="_blank" rel="noreferrer">
                 <FaGithub className="h-4 w-4" />
                 GitHub
+              </a>
+            </Button>
+            <Button asChild variant="secondary">
+              <a href={profile.linkedin} target="_blank" rel="noreferrer">
+                <FaLinkedin className="h-4 w-4" />
+                LinkedIn
               </a>
             </Button>
           </div>
