@@ -5,7 +5,13 @@ import {
   BiLogoTypescript,
 } from "react-icons/bi";
 import { RiNextjsFill, RiTailwindCssFill } from "react-icons/ri";
-import { SiDocker, SiExpress, SiMongodb, SiNodedotjs, SiPython } from "react-icons/si";
+import {
+  SiDocker,
+  SiExpress,
+  SiMongodb,
+  SiNodedotjs,
+  SiPython,
+} from "react-icons/si";
 
 export const profile = {
   name: "Yuvraj Singh Rathore",
@@ -90,7 +96,7 @@ export const projects = [
     description:
       "A personal finance app for tracking expenses, budgets, and savings goals.",
     tags: ["Next.js", "REST API"],
-    impact: "Personal project",
+    // impact: "Personal project",
     image: "/fynancialGif.gif",
     featured: true,
   },
@@ -100,7 +106,7 @@ export const projects = [
     description:
       "A grading platform for tracking and managing student performance.",
     tags: ["Next.js", "REST API"],
-    impact: "Personal project",
+    // impact: "Personal project",
     image: "/graddingGif.gif",
     featured: true,
   },

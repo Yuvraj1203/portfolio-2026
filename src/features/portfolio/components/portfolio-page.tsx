@@ -393,9 +393,11 @@ function Projects() {
                   className="absolute inset-0 h-full w-full object-cover transition group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-[linear-gradient(120deg,transparent,rgba(255,255,255,.22),transparent)] opacity-0 transition group-hover:translate-x-full group-hover:opacity-100" />
-                <div className="absolute bottom-4 left-4 rounded-full bg-white/85 px-3 py-1 text-xs font-semibold text-zinc-950 backdrop-blur">
-                  {project.impact}
-                </div>
+                {project.impact && (
+                  <div className="absolute bottom-4 left-4 rounded-full bg-white/85 px-3 py-1 text-xs font-semibold text-zinc-950 backdrop-blur">
+                    {project.impact}
+                  </div>
+                )}
               </div>
               <div className="p-4">
                 <p className="text-sm text-cyan-700 dark:text-cyan-300">
