@@ -89,35 +89,89 @@ export const stack = [
   { name: "Python", icon: SiPython },
 ];
 
-export const projects = [
+export type Project = {
+  title: string;
+  category: string;
+  description: string;
+  tags: string[];
+  accent: string;
+  media: { type: "web" | "mobile"; src: string | string[]; alt: string };
+  featured?: boolean;
+  live?: string;
+  github?: string;
+  metrics?: { k: string; v: string }[];
+};
+
+export const projects: Project[] = [
   {
     title: "Fynancial",
     category: "Finance App",
     description:
-      "A personal finance app for tracking expenses, budgets, and savings goals.",
+      "The easiest way to engage clients, unify your technology, and grow organically. All on your RIA's very own branded app.",
     tags: ["Next.js", "REST API"],
-    // impact: "Personal project",
-    image: "/fynancialGif.gif",
+    accent: "from-emerald-400/25 via-cyan-400/10 to-transparent",
+    media: {
+      type: "mobile" as const,
+      src: "/project/fynancial.PNG",
+      alt: "Fynancial app preview",
+    },
     featured: true,
   },
   {
-    title: "Grading",
+    title: "Gradding",
     category: "Academic Tool",
     description:
       "A grading platform for tracking and managing student performance.",
     tags: ["Next.js", "REST API"],
-    // impact: "Personal project",
-    image: "/graddingGif.gif",
-    featured: true,
+    accent: "from-amber-400/25 via-orange-400/10 to-transparent",
+    media: {
+      type: "web" as const,
+      src: "/project/gradding.png",
+      alt: "Grading app preview",
+    },
+    featured: false,
   },
   {
     title: "SK5 Marketing",
     category: "Marketing Website",
     description: "A marketing website built for lead generation and outreach.",
     tags: ["Next.js", "Tailwind CSS"],
-    impact: "Client project",
-    image: "/Sk5Gif.gif",
+    accent: "from-fuchsia-400/25 via-violet-400/10 to-transparent",
+    media: {
+      type: "web" as const,
+      src: "/project/sk5.png",
+      alt: "SK5 Marketing preview",
+    },
     featured: false,
+  },
+
+  {
+    title: "Client Portfolio",
+    category: "Graphic Designer Portfolio",
+    description:
+      "A Graphic Designer portfolio to show case their work by uploading their images and show casing them",
+    tags: ["Next.js", "Tailwind CSS"],
+    accent: "from-blue-400/25 via-cyan-400/10 to-transparent",
+    media: {
+      type: "web" as const,
+      src: "/project/clientPortfolio.png",
+      alt: "Client Portfolio preview",
+    },
+    featured: false,
+  },
+  {
+    title: "Stable Manager",
+    category: "Booking App",
+    description:
+      "A React Native booking app for managing stable slots and schedules, with real-time push notifications for reservations.",
+    tags: ["React Native", "Zustand", "Notifee"],
+    accent: "from-blue-400/25 via-indigo-400/10 to-transparent",
+    media: {
+      type: "mobile" as const,
+      src: ["/project/stable1.PNG", "/project/stable2.PNG"],
+      alt: "Stable Manager app preview",
+    },
+    featured: true,
   },
 ];
 

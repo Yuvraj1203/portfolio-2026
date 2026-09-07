@@ -17,7 +17,7 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import type { ReactNode } from "react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { FaGithub } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -36,6 +36,7 @@ import {
   skills,
   stack,
   timeline,
+  type Project,
 } from "../data/portfolio";
 
 const contactSchema = z.object({
@@ -343,6 +344,228 @@ function Skills() {
   );
 }
 
+function useImageCycle(count: number, intervalMs = 3200) {
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    if (count < 2) return;
+    const id = setInterval(() => {
+      setIndex((current) => (current + 1) % count);
+    }, intervalMs);
+    return () => clearInterval(id);
+  }, [count, intervalMs]);
+
+  return [index, setIndex] as const;
+}
+
+function PreviewDots({
+  count,
+  index,
+  onSelect,
+}: {
+  count: number;
+  index: number;
+  onSelect: (index: number) => void;
+}) {
+  if (count < 2) return null;
+  return (
+    <div className="flex justify-center gap-1.5 py-2">
+      {Array.from({ length: count }).map((_, dotIndex) => (
+        <button
+          key={dotIndex}
+          type="button"
+          aria-label={`Show screenshot ${dotIndex + 1}`}
+          onClick={() => onSelect(dotIndex)}
+          className={cn(
+            "h-1.5 rounded-full transition-all",
+            dotIndex === index
+              ? "w-4 bg-cyan-600 dark:bg-cyan-300"
+              : "w-1.5 bg-zinc-300 dark:bg-white/20",
+          )}
+        />
+      ))}
+    </div>
+  );
+}
+
+function WebPreview({ src, alt }: { src: string | string[]; alt: string }) {
+  const images = Array.isArray(src) ? src : [src];
+  const [index, setIndex] = useImageCycle(images.length);
+
+  return (
+    <div className="overflow-hidden rounded-2xl border border-zinc-200/70 bg-white/60 dark:border-white/10 dark:bg-white/5">
+      <div className="flex items-center gap-1.5 border-b border-zinc-200/70 px-3 py-2 dark:border-white/10">
+        <span className="h-2 w-2 rounded-full bg-red-400/70" />
+        <span className="h-2 w-2 rounded-full bg-amber-400/70" />
+        <span className="h-2 w-2 rounded-full bg-emerald-400/70" />
+      </div>
+      <div className="relative aspect-[16/10] overflow-hidden">
+        <AnimatePresence mode="sync">
+          <motion.div
+            key={images[index]}
+            className="absolute inset-0"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.6, ease: "easeInOut" }}
+          >
+            <Image
+              src={images[index]}
+              alt={alt}
+              fill
+              className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
+            />
+          </motion.div>
+        </AnimatePresence>
+      </div>
+      <PreviewDots count={images.length} index={index} onSelect={setIndex} />
+    </div>
+  );
+}
+
+function MobilePreview({ src, alt }: { src: string | string[]; alt: string }) {
+  const images = Array.isArray(src) ? src : [src];
+  const [index, setIndex] = useImageCycle(images.length);
+
+  return (
+    <div className="flex flex-col items-center py-2">
+      <div className="w-[200px] rounded-[2rem] border border-zinc-200/70 bg-white/60 p-2 shadow-xl dark:border-white/10 dark:bg-white/5">
+        <div className="relative aspect-[9/19.5] overflow-hidden rounded-[1.5rem]">
+          <AnimatePresence mode="sync">
+            <motion.div
+              key={images[index]}
+              className="absolute inset-0"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.6, ease: "easeInOut" }}
+            >
+              <Image
+                src={images[index]}
+                alt={alt}
+                fill
+                className="object-cover transition-transform duration-700 group-hover:scale-105"
+              />
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </div>
+      <PreviewDots count={images.length} index={index} onSelect={setIndex} />
+    </div>
+  );
+}
+
+function ProjectCard({ project }: { project: Project }) {
+  const isFeaturedMobile = project.featured && project.media.type === "mobile";
+
+  const preview =
+    project.media.type === "web" ? (
+      <WebPreview src={project.media.src} alt={project.media.alt} />
+    ) : (
+      <MobilePreview src={project.media.src} alt={project.media.alt} />
+    );
+
+  const meta = (
+    <>
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <p className="text-xs uppercase tracking-[0.2em] text-cyan-700 dark:text-cyan-300">
+            {project.category}
+          </p>
+          <h3 className="mt-2 text-2xl font-semibold tracking-tight">
+            {project.title}
+          </h3>
+        </div>
+        {project.featured ? (
+          <span className="shrink-0 rounded-full border border-zinc-200/70 bg-white/70 px-2.5 py-1 text-[10px] uppercase tracking-widest text-zinc-500 dark:border-white/10 dark:bg-white/5 dark:text-zinc-400">
+            Featured
+          </span>
+        ) : null}
+      </div>
+      <p className="mt-3 max-w-md text-sm leading-6 text-zinc-600 dark:text-zinc-300">
+        {project.description}
+      </p>
+      <div className="mt-5 flex flex-wrap gap-2">
+        {project.tags.map((tag) => (
+          <span
+            key={tag}
+            className="rounded-full border border-zinc-200/70 px-3 py-1 text-xs text-zinc-600 dark:border-white/10 dark:text-zinc-300"
+          >
+            {tag}
+          </span>
+        ))}
+      </div>
+      {project.metrics?.length ? (
+        <div className="mt-4 flex flex-wrap gap-4">
+          {project.metrics.map((metric) => (
+            <span key={metric.k} className="text-xs">
+              <span className="text-zinc-500 dark:text-zinc-400">
+                {metric.k}:{" "}
+              </span>
+              <span className="font-semibold text-cyan-700 dark:text-cyan-300">
+                {metric.v}
+              </span>
+            </span>
+          ))}
+        </div>
+      ) : null}
+      {project.live || project.github ? (
+        <div className="mt-6 flex flex-wrap gap-2">
+          {project.live ? (
+            <a
+              href={project.live}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1.5 rounded-full bg-zinc-950 px-4 py-2 text-xs font-medium text-white transition hover:-translate-y-0.5 dark:bg-white dark:text-zinc-950"
+            >
+              Live preview <ArrowUpRight className="h-3.5 w-3.5" />
+            </a>
+          ) : null}
+          {project.github ? (
+            <a
+              href={project.github}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1.5 rounded-full border border-zinc-200/70 px-4 py-2 text-xs font-medium text-zinc-700 transition hover:bg-zinc-950/5 dark:border-white/10 dark:text-zinc-200 dark:hover:bg-white/10"
+            >
+              <FaGithub className="h-3.5 w-3.5" /> Source
+            </a>
+          ) : null}
+        </div>
+      ) : null}
+    </>
+  );
+
+  return (
+    <article
+      className={cn(
+        "group relative overflow-hidden rounded-3xl border border-zinc-200/70 bg-white/70 p-6 backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:shadow-[0_30px_90px_rgba(14,165,233,.18)] dark:border-white/10 dark:bg-white/5 sm:p-7",
+        project.featured && "md:col-span-2",
+      )}
+    >
+      <div
+        className={cn(
+          "pointer-events-none absolute inset-0 bg-gradient-to-br opacity-60 transition-opacity duration-500 group-hover:opacity-100",
+          project.accent,
+        )}
+      />
+      <div className="relative">
+        {isFeaturedMobile ? (
+          <div className="grid gap-6 sm:grid-cols-[1fr_auto] sm:items-center">
+            <div>{meta}</div>
+            <div>{preview}</div>
+          </div>
+        ) : (
+          <>
+            {meta}
+            <div className="mt-6">{preview}</div>
+          </>
+        )}
+      </div>
+    </article>
+  );
+}
+
 function Projects() {
   const t = useTranslations();
   const [query, setQuery] = useState("");
@@ -372,53 +595,14 @@ function Projects() {
           className="w-full bg-transparent text-sm outline-none placeholder:text-zinc-400"
         />
       </Reveal>
-      <div className="mt-10 grid gap-5 lg:grid-cols-3">
+      <div className="mt-10 grid gap-5 md:grid-cols-2">
         {filtered.map((project, index) => (
-          <Reveal key={project.title} delay={index * 0.06}>
-            <article
-              className={cn(
-                "group h-full overflow-hidden rounded-3xl border border-zinc-200/70 bg-white/70 p-3 backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:shadow-[0_30px_90px_rgba(14,165,233,.18)] dark:border-white/10 dark:bg-white/5",
-                project.featured && "lg:col-span-1",
-              )}
-            >
-              <div
-                className="relative aspect-[1.35] overflow-hidden rounded-2xl"
-                // style={{ background: project.image }}
-              >
-                <Image
-                  src={project.image ?? "/fynancialGif.gif"}
-                  alt=""
-                  width={420}
-                  height={420}
-                  className="absolute inset-0 h-full w-full object-cover transition group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-[linear-gradient(120deg,transparent,rgba(255,255,255,.22),transparent)] opacity-0 transition group-hover:translate-x-full group-hover:opacity-100" />
-                {project.impact && (
-                  <div className="absolute bottom-4 left-4 rounded-full bg-white/85 px-3 py-1 text-xs font-semibold text-zinc-950 backdrop-blur">
-                    {project.impact}
-                  </div>
-                )}
-              </div>
-              <div className="p-4">
-                <p className="text-sm text-cyan-700 dark:text-cyan-300">
-                  {project.category}
-                </p>
-                <h3 className="mt-2 text-2xl font-semibold">{project.title}</h3>
-                <p className="mt-3 text-sm leading-6 text-zinc-600 dark:text-zinc-300">
-                  {project.description}
-                </p>
-                <div className="mt-5 flex flex-wrap gap-2">
-                  {project.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="rounded-full border border-zinc-200/70 px-3 py-1 text-xs text-zinc-600 dark:border-white/10 dark:text-zinc-300"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </article>
+          <Reveal
+            key={project.title}
+            delay={index * 0.06}
+            className={project.featured ? "md:col-span-2" : undefined}
+          >
+            <ProjectCard project={project} />
           </Reveal>
         ))}
       </div>
