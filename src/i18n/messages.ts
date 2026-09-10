@@ -54,7 +54,9 @@ export const messages = {
       email: "Email",
       message: "Message",
       send: "Send inquiry",
-      success: "Draft validated. Connect this form to your mail endpoint when ready.",
+      sending: "Sending…",
+      success: "Message sent — I’ll get back to you soon.",
+      error: "Something went wrong. Please try again or email me directly.",
     },
   },
   hi: {
@@ -73,7 +75,7 @@ export const messages = {
     },
     labels: { years: "वर्ष", tenants: "टेनेंट्स स्केल किए", setup: "सेटअप समय घटाया", onboarding: "ऑनबोर्डिंग स्वचालित", featured: "मुख्य कार्य", stack: "मुख्य स्टैक", timeline: "समयरेखा", github: "GitHub संकेत", resume: "रिज्यूमे", contact: "संपर्क" },
     sections: { experience: "स्केल के लिए बना अनुभव", skills: "क्षमताएं", projects: "चयनित प्रोजेक्ट", github: "जिन टूल्स के साथ मैं बनाता हूं", contact: "कुछ बेहतरीन बनाते हैं।" },
-    contact: { name: "नाम", email: "ईमेल", message: "संदेश", send: "भेजें", success: "ड्राफ्ट वैध है। तैयार होने पर इसे मेल एंडपॉइंट से जोड़ें।" },
+    contact: { name: "नाम", email: "ईमेल", message: "संदेश", send: "भेजें", sending: "भेजा जा रहा है…", success: "संदेश भेज दिया गया — मैं जल्द ही आपसे संपर्क करूंगा।", error: "कुछ गलत हो गया। कृपया पुनः प्रयास करें या मुझे सीधे ईमेल करें।" },
   },
   es: {
     nav: { about: "Perfil", experience: "Experiencia", skills: "Habilidades", projects: "Proyectos", contact: "Contacto" },
@@ -88,7 +90,7 @@ export const messages = {
     about: { title: "Un portfolio construido como una superficie de producto.", body: "Trabajo entre arquitectura frontend, diseño de interacción y rendimiento. Mi punto fuerte es convertir ideas ambiguas en interfaces tranquilas, precisas y muy usables." },
     labels: { years: "Años creando", tenants: "Tenants escalados", setup: "Tiempo de setup reducido", onboarding: "Onboarding automatizado", featured: "Trabajo destacado", stack: "Stack central", timeline: "Cronología", github: "Señal GitHub", resume: "CV", contact: "Contacto" },
     sections: { experience: "Experiencias diseñadas para escalar", skills: "Capacidades", projects: "Proyectos seleccionados", github: "Herramientas con las que construyo", contact: "Construyamos algo preciso." },
-    contact: { name: "Nombre", email: "Email", message: "Mensaje", send: "Enviar", success: "Borrador validado. Conecta este formulario a tu endpoint de correo cuando esté listo." },
+    contact: { name: "Nombre", email: "Email", message: "Mensaje", send: "Enviar", sending: "Enviando…", success: "Mensaje enviado — te responderé pronto.", error: "Algo salió mal. Inténtalo de nuevo o escríbeme directamente." },
   },
   ja: {
     nav: { about: "紹介", experience: "経験", skills: "スキル", projects: "作品", contact: "連絡" },
@@ -103,7 +105,7 @@ export const messages = {
     about: { title: "プロダクト画面として設計されたポートフォリオ。", body: "フロントエンドアーキテクチャ、インタラクションデザイン、パフォーマンスの交差点で仕事をしています。曖昧なアイデアを静かで精密なUIへ変えるのが得意です。" },
     labels: { years: "構築年数", tenants: "対応テナント数", setup: "セットアップ時間短縮", onboarding: "オンボーディング自動化", featured: "注目作品", stack: "主要スタック", timeline: "タイムライン", github: "GitHub 指標", resume: "履歴書", contact: "連絡" },
     sections: { experience: "スケールする体験設計", skills: "能力", projects: "選定プロジェクト", github: "使用しているツール", contact: "研ぎ澄まされたものを作りましょう。" },
-    contact: { name: "名前", email: "メール", message: "メッセージ", send: "送信", success: "下書きは検証済みです。準備ができたらメールエンドポイントに接続してください。" },
+    contact: { name: "名前", email: "メール", message: "メッセージ", send: "送信", sending: "送信中…", success: "メッセージを送信しました — 近日中にご連絡します。", error: "エラーが発生しました。もう一度お試しいただくか、直接メールしてください。" },
   },
 } satisfies Record<Locale, Record<string, unknown>>;
 

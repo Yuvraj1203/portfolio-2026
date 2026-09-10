@@ -638,9 +638,13 @@ function StackAndGithub() {
   );
 }
 
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/xppzkbyw";
+
 function Contact() {
   const t = useTranslations();
-  const [submitted, setSubmitted] = useState(false);
+  const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">(
+    "idle",
+  );
   const {
     register,
     handleSubmit,
@@ -651,9 +655,23 @@ function Contact() {
     defaultValues: { name: "", email: "", message: "" },
   });
 
-  const onSubmit = () => {
-    setSubmitted(true);
-    reset();
+  const onSubmit = async (values: ContactValues) => {
+    setStatus("submitting");
+    try {
+      const response = await fetch(FORMSPREE_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+      if (!response.ok) throw new Error("Form submission failed");
+      setStatus("success");
+      reset();
+    } catch {
+      setStatus("error");
+    }
   };
 
   return (
@@ -715,15 +733,18 @@ function Contact() {
               />
             </Field>
             <div className="mt-5 flex items-center justify-between gap-4">
-              <Button onSubmit={handleSubmit(onSubmit)} type="submit">
-                {t("contact.send")}
+              <Button type="submit" disabled={status === "submitting"}>
+                {status === "submitting" ? t("contact.sending") : t("contact.send")}
                 <ArrowUpRight className="h-4 w-4" />
               </Button>
-              {/* {submitted ? (
+              {status === "success" ? (
                 <p className="text-sm text-emerald-600 dark:text-emerald-300">
                   {t("contact.success")}
                 </p>
-              ) : null} */}
+              ) : null}
+              {status === "error" ? (
+                <p className="text-sm text-rose-500">{t("contact.error")}</p>
+              ) : null}
             </div>
           </form>
         </Reveal>
