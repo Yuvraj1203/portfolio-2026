@@ -645,12 +645,16 @@ function Contact() {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<ContactValues>({
     resolver: zodResolver(contactSchema),
     defaultValues: { name: "", email: "", message: "" },
   });
 
-  const onSubmit = () => setSubmitted(true);
+  const onSubmit = () => {
+    setSubmitted(true);
+    reset();
+  };
 
   return (
     <SectionShell
@@ -711,15 +715,15 @@ function Contact() {
               />
             </Field>
             <div className="mt-5 flex items-center justify-between gap-4">
-              <Button type="submit">
+              <Button onSubmit={handleSubmit(onSubmit)} type="submit">
                 {t("contact.send")}
                 <ArrowUpRight className="h-4 w-4" />
               </Button>
-              {submitted ? (
+              {/* {submitted ? (
                 <p className="text-sm text-emerald-600 dark:text-emerald-300">
                   {t("contact.success")}
                 </p>
-              ) : null}
+              ) : null} */}
             </div>
           </form>
         </Reveal>
